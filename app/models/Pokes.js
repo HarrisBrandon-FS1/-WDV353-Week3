@@ -36,6 +36,10 @@ const pokeSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    leader: {
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'Leader',  
+    },
     description: {
         type: String,
         required: [true, "Please add a description"],
