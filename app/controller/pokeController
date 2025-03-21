@@ -2,6 +2,8 @@ const Pokes = require("../models/Pokes");
 
 const getAllPokes = async (req, res) => {
 
+    console.log(">>>", req.query);
+
     let querString = JSON.stringify(req.query);
 
     querString = querString.replace(/\b(gt|gte|lt|lte)\b/g,
@@ -45,50 +47,50 @@ const getPokeById = async (req, res) => {
 };
 
 
-const createPoke = async (req, res) => {
-    try{
-        const { poke } = req.body;
-        const user = await leader.findById(poke.leader)
-        poke.leader = user;
-        const pokeData = new Pokes(poke);
-        user.pokes.push(pokeData._id);
-        const queries = [pokeData.save(), user.save()];
-        await Promise.all(queries);
-
-        res.status(200).json({
-            success: false,
-            message: `${req.method} - Poke request made`,
-        });
-    }catch({ message }) {
-        res.status(500).json({
-            success: false,
-            message,
-        });
-    }
-}
-
 //const createPoke = async (req, res) => {
-  //  const {poke} = req.body;
-    //try{
-      //  const newPoke = await Pokes.create(poke);
-   //console.log("data >>>", newPoke);
-    //res.status(200).json({
-      //  data: newPoke,
-        //success: true,
-       // message: `${req.method} - request to Pokemon endpoint`,
-    //});
+  //  try{
+    //    const { poke } = req.body;
+     //   const user = await leader.findById(poke.leader)
+       // poke.leader = user;
+        //const pokeData = new Pokes(poke);
+       // user.pokes.push(pokeData._id);
+        //const queries = [pokeData.save(), user.save()];
+        //await Promise.all(queries);
 
-    //}catch(error){
-      //  if(error.name == "ValidationError") {
-        //    console.error("Error Validating!", error);
-          //  res.status(422).json(error);
-        //}else{
-          //  console.error(error);
-            //res.status(500).json(error);
-        //}
-   // }
+        //res.status(200).json({
+          //  success: false,
+            //message: `${req.method} - Poke request made`,
+       // });
+    //}catch({ message }) {
+      //  res.status(500).json({
+        //    success: false,
+          //  message,
+        //});
+    //}
+//}
+
+const createPoke = async (req, res) => {
+    const {poke} = req.body;
+    try{
+        const newPoke = await Pokes.create(poke);
+   console.log("data >>>", newPoke);
+    res.status(200).json({
+        data: newPoke,
+        success: true,
+        message: `${req.method} - request to Pokemon endpoint`,
+    });
+
+    }catch(error){
+        if(error.name == "ValidationError") {
+            console.error("Error Validating!", error);
+            res.status(422).json(error);
+        }else{
+            console.error(error);
+            res.status(500).json(error);
+        }
+   }
    
-//};
+};
 
 const updatePoke = async (req, res) => {
     const {id} = req.params;
